@@ -7,10 +7,18 @@ enum CreationError {
 #[derive(PartialEq, Debug)]
 struct PositiveNonzeroInteger(u64);
 
+type Result<T> = std::result::Result<T, CreationError>;
+
 impl PositiveNonzeroInteger {
-    fn new(value: i64) -> Result<Self, CreationError> {
+    fn new(value: i64) -> Result<Self> {
         // TODO: This function shouldn't always return an `Ok`.
-        Ok(Self(value as u64))
+        if value < 0 {
+            Err(CreationError::Negative)
+        } else if value == 0 {
+            Err(CreationError::Zero)
+        } else {
+            Ok(Self(value as u64))
+        }
     }
 }
 
